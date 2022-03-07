@@ -2,20 +2,24 @@ module Avatax
   module RequestDecorator
     include ::SpreeAvataxOfficial::HttpHelper
 
-    def request(method, path, model, options = {}, apiversion="", headers=Hash.new)
-      max_retries                  ||= ::SpreeAvataxOfficial::Config.max_retries
-      uri_encoded_path               = URI.parse(path).to_s
-      response                       = connection.send(method) do |request|
-        request.headers['X-Avalara-Client'] = request.headers['X-Avalara-Client'].gsub("API_VERSION", apiversion)
-        request.headers=request.headers.merge(headers)  unless headers.empty?
-        request.options['timeout'] ||= 1_200
+    def request(method, path, model, options = {}, apiversion = "", headers = {})
+      max_retries = ::SpreeAvataxOfficial::Config.max_retries
+      uri_encoded_path = URI.parse(path).to_s
+
+      # Custom change to include API version in the header
+      headers['X-Avalara-Client'] = headers['X-Avalara-Client'].gsub("API_VERSION", apiversion) if headers['X-Avalara-Client']
+
+      response = connection.send(method) do |request|
+        request.headers['X-Avalara-Client'] = request.headers['X-Avalara-Client'].gsub("API_VERSION", apiversion) if request.headers['X-Avalara-Client']
+        request.headers = request.headers.merge(headers)
+        request.options['timeout'] = 1_200
         case method
         when :get, :delete
           request.url("#{uri_encoded_path}?#{URI.encode_www_form(options)}")
         when :post, :put
           request.url("#{uri_encoded_path}?#{URI.encode_www_form(options)}")
           request.headers['Content-Type'] = 'application/json'
-          request.body                    = model.to_json unless model.empty?
+          request.body = model.to_json unless model.empty?
         end
       end
 
