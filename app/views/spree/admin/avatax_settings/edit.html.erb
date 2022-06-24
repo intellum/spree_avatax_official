@@ -16,23 +16,6 @@
       </fieldset>
 
       <fieldset>
-        <legend><%= Spree.t('spree_avatax_official.avatax_credentials') %></legend>
-        <p>
-          <label><%= Spree.t('spree_avatax_official.company_code') %></label><br />
-          <%= text_field_tag('company_code', SpreeAvataxOfficial::Config.company_code, size: 46, maxlength: 256, class: 'form-control') %>
-        </p>
-
-        <p>
-          <label><%= Spree.t('spree_avatax_official.account_number') %></label><br />
-          <%= text_field_tag('account_number', SpreeAvataxOfficial::Config.account_number, size: 46, maxlength: 256, class: 'form-control') %>
-        </p>
-        <p>
-          <label><%= Spree.t('spree_avatax_official.license_key') %></label><br />
-          <%= text_field_tag('license_key', SpreeAvataxOfficial::Config.license_key, size: 46, maxlength: 256, class: 'form-control') %>
-        </p>
-      </fieldset>
-
-      <fieldset>
         <legend><%= Spree.t('spree_avatax_official.endpoint_urls') %></legend>
         <p>
           <label><%= Spree.t('spree_avatax_official.endpoint') %></label><br />
@@ -95,5 +78,4 @@
   </div>
 
   <p class="form-buttons"><%= button Spree.t('spree_avatax_official.save_preferences') %></p>
-  <p class="form-buttons"><%=link_to Spree.t('spree_avatax_official.ping_avatax'), :admin_avatax_ping, method: :post, class: 'btn btn-primary' %></p>
 <% end %>

@@ -4,7 +4,7 @@ module Spree
       respond_to :html
 
       def create
-        response = SpreeAvataxOfficial::Utilities::PingService.call
+        response = SpreeAvataxOfficial::Utilities::PingService.call(current_store)
         if response.success? && response['value']['authenticated']
           flash[:success] = Spree.t('spree_avatax_official.connected_successful')
         elsif response.success? && !response['value']['authenticated']
@@ -12,7 +12,7 @@ module Spree
         else
           flash[:error] = Spree.t('spree_avatax_official.connection_rejected')
         end
-        redirect_to edit_admin_avatax_settings_path
+        redirect_to edit_admin_avatax_accounts_path
       end
     end
   end
