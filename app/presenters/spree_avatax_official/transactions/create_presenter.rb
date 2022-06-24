@@ -33,7 +33,7 @@ module SpreeAvataxOfficial
       attr_reader :order, :transaction_type, :transaction_code
 
       def company_code
-        order.store.try(:avatax_company_code) || SpreeAvataxOfficial::Config.company_code
+        avatax_account_record&.company_code || order.store.try(:avatax_company_code)
       end
 
       def entity_use_code
@@ -57,11 +57,12 @@ module SpreeAvataxOfficial
       end
 
       def ship_to_payload
-        SpreeAvataxOfficial::AddressPresenter.new(address: order.tax_address, address_type: 'ShipTo').to_json
+        SpreeAvataxOfficial::AddressPresenter.new(address: order.tax_address, address_type: 'SingleLocation').to_json
       end
 
       def addresses_payload
         ship_from_payload.merge(ship_to_payload)
+        ship_to_payload
       end
 
       def items_payload
@@ -74,6 +75,10 @@ module SpreeAvataxOfficial
 
       def currency_code
         order.currency || ::Spree::Config[:currency]
+      end
+
+      def avatax_account_record
+        SpreeAvataxOfficial::AvataxAccount.find_by(spree_store: order.store)
       end
     end
   end

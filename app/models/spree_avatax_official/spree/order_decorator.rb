@@ -40,13 +40,13 @@ module SpreeAvataxOfficial
       end
 
       def create_tax_charge!
-        return super unless SpreeAvataxOfficial::Config.enabled
+        return super unless SpreeAvataxOfficial::Config.enabled && avatax_account&.enabled?
 
         SpreeAvataxOfficial::CreateTaxAdjustmentsService.call(order: self)
       end
 
       def recalculate_avatax_taxes
-        return unless SpreeAvataxOfficial::Config.enabled
+        return unless SpreeAvataxOfficial::Config.enabled && avatax_account&.enabled?
 
         SpreeAvataxOfficial::CreateTaxAdjustmentsService.call(order: self)
         update_totals
@@ -74,15 +74,19 @@ module SpreeAvataxOfficial
       private
 
       def commit_in_avatax
-        return unless SpreeAvataxOfficial::Config.enabled && SpreeAvataxOfficial::Config.commit_transaction_enabled
+        return unless SpreeAvataxOfficial::Config.enabled && avatax_account&.enabled? && SpreeAvataxOfficial::Config.commit_transaction_enabled
 
         SpreeAvataxOfficial::Transactions::CreateService.call(order: self)
       end
 
       def void_in_avatax
-        return unless SpreeAvataxOfficial::Config.enabled
+        return unless SpreeAvataxOfficial::Config.enabled && avatax_account&.enabled?
 
         SpreeAvataxOfficial::Transactions::VoidService.call(order: self)
+      end
+
+      def avatax_account
+        @avatax_account ||= SpreeAvataxOfficial::AvataxAccount.find_by(spree_store: self.store)
       end
     end
   end

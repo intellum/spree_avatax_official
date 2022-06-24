@@ -22,6 +22,7 @@ en:
       endpoint_urls: Avatax Endpoint urls
       endpoint: Endpoint
       settings: Avatax Settings
+      avatax_account: Avatax Account Info
       ship_from_address: Ship from address
       address_validation: Address validation
       enable_address_validation: Enable address validation
@@ -38,3 +39,4 @@ en:
       avalara_entity_use_code: Avalara Entity Use Code
       ping_avatax: Ping AvaTax
       wrong_endpoint_url: Endpoint URL seems to be invalid
+      avatax_account_updated: Account updated

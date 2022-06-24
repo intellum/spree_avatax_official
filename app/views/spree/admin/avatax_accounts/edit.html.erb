@@ -1,0 +1,34 @@
+<h1><%= Spree.t('spree_avatax_official.avatax_account') %></h1>
+
+<%= form_for(:avatax_account, url: admin_avatax_accounts_path, html: { method: :put, id: :avatax_accounts_form }) do |f| %>
+  <div class="yui-g">
+    <div class="yui-u first">
+      <fieldset>
+        <legend><%= Spree.t('spree_avatax_official.account_settings') %></legend>
+        <div class="checkbox">
+          <label>
+            <%= f.hidden_field(:enabled) %>
+            <%= f.check_box(:enabled) %>
+            <%= Spree.t('spree_avatax_official.enabled') %>
+          </label>
+        </div>
+        <p>
+          <label><%= Spree.t('spree_avatax_official.company_code') %></label><br />
+          <%= f.text_field(:company_code, size: 46, maxlength: 256, class: 'form-control') %>
+        </p>
+
+        <p>
+          <label><%= Spree.t('spree_avatax_official.account_number') %></label><br />
+          <%= f.text_field(:account_number, size: 46, maxlength: 256, class: 'form-control') %>
+        </p>
+        <p>
+          <label><%= Spree.t('spree_avatax_official.license_key') %></label><br />
+          <%= f.text_field(:license_key, size: 46, maxlength: 256, class: 'form-control') %>
+        </p>
+      </fieldset>
+    </div>
+  </div>
+
+  <p class="form-buttons"><%= button Spree.t('spree_avatax_official.save_account_info') %></p>
+  <p class="form-buttons"><%=link_to Spree.t('spree_avatax_official.ping_avatax'), :admin_avatax_ping, method: :post, class: 'btn btn-primary' %></p>
+<% end %>
