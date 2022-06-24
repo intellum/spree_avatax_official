@@ -12,7 +12,7 @@ module SpreeAvataxOfficial
       end
 
       def update_tax_charge
-        return super unless SpreeAvataxOfficial::Config.enabled
+        return super unless SpreeAvataxOfficial::Config.enabled && SpreeAvataxOfficial::AvataxAccount.find_by(spree_store: order.store)&.enabled
 
         SpreeAvataxOfficial::CreateTaxAdjustmentsService.call(order: order)
       end

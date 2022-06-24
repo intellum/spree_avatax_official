@@ -14,7 +14,7 @@ module SpreeAvataxOfficial
 
     private
 
-    def client
+    def client(store)
       AvaTax::Client.new(
         app_name:           APP_NAME,
         app_version:        APP_VERSION,
@@ -22,13 +22,13 @@ module SpreeAvataxOfficial
         logger:             true,
         faraday_response:   true,
         endpoint:           SpreeAvataxOfficial::Config.endpoint,
-        username:           SpreeAvataxOfficial::Config.account_number,
-        password:           SpreeAvataxOfficial::Config.license_key
+        username:           avatax_account_record(store)&.account_number,
+        password:           avatax_account_record(store)&.license_key
       )
     end
 
     def company_code(order)
-      order.store&.avatax_company_code || SpreeAvataxOfficial::Config.company_code
+      avatax_account_record(order.store)&.company_code || order.store&.avatax_company_code || SpreeAvataxOfficial::Config.company_code
     end
 
     def request_result(response, object = nil)
@@ -66,6 +66,10 @@ module SpreeAvataxOfficial
 
     def logger
       @logger ||= SpreeAvataxOfficial::AvataxLog.new
+    end
+
+    def avatax_account_record(store)
+      @avatax_account_record ||= SpreeAvataxOfficial::AvataxAccount.find_by(spree_store: store)
     end
   end
 end

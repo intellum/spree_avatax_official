@@ -20,7 +20,13 @@ module SpreeAvataxOfficial
           address: address
         ).to_json
 
-        client.resolve_address(ship_to_address_model)
+        store_client(address).resolve_address(ship_to_address_model)
+      end
+
+      def store_client(address)
+        address_sym = ::Spree::Config.tax_using_ship_address ? :ship_address : :bill_address
+        order       = ::Spree::Order.incomplete.find_by(address_sym => self)
+        client(order.store)
       end
     end
   end
