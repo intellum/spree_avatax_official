@@ -9,10 +9,7 @@ module SpreeAvataxOfficial
 
       def update_settings(params)
         update_address_settings(params[:ship_from])
-
-        # SpreeAvataxOfficial::Config.account_number             = params[:account_number] if params.key?(:account_number)
-        # SpreeAvataxOfficial::Config.license_key                = params[:license_key] if params.key?(:license_key)
-        # SpreeAvataxOfficial::Config.company_code               = params[:company_code] if params.key?(:company_code)
+        SpreeAvataxOfficial::Config.enabled                    = params[:enabled] if params.key?(:enabled)
         SpreeAvataxOfficial::Config.endpoint                   = params[:endpoint] if params.key?(:endpoint)
         SpreeAvataxOfficial::Config.address_validation_enabled = params[:address_validation_enabled] if params.key?(:address_validation_enabled)
         SpreeAvataxOfficial::Config.commit_transaction_enabled = params[:commit_transaction_enabled] if params.key?(:commit_transaction_enabled)
