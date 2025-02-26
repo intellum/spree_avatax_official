@@ -1,4 +1,5 @@
 require_relative 'configuration'
+require_relative 'menu_builder'
 
 module SpreeAvataxOfficial
   class Engine < Rails::Engine
@@ -16,6 +17,12 @@ module SpreeAvataxOfficial
 
     config.after_initialize do |app|
       app.config.spree.calculators.tax_rates << SpreeAvataxOfficial::Calculator::AvataxTransactionCalculator
+      SpreeAvataxOfficial::MenuBuilder.add_menus(app.config.spree_backend.main_menu)
+      SpreeI18n::Engine.instance_eval do
+        pattern = pattern_from app.config.i18n.available_locales
+
+        add("config/locales/#{pattern}.{rb,yml}")
+      end
     end
 
     # use rspec for tests
