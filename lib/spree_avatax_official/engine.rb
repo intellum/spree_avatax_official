@@ -8,8 +8,10 @@ module SpreeAvataxOfficial
 
     config.autoload_paths += %W[#{config.root}/lib]
 
-    initializer 'spree_avatax_official.environment', before: :load_config_initializers do |_app|
-      SpreeAvataxOfficial::Config = SpreeAvataxOfficial::Configuration.new
+    # Resolve Config lazily: Configuration lives in app/models and is not
+    # autoloaded yet at before: :load_config_initializers under Rails 7.2 Zeitwerk.
+    config.to_prepare do
+      SpreeAvataxOfficial::Config ||= SpreeAvataxOfficial::Configuration.new
     end
 
     initializer 'spree.avatax_certified.calculators', after: 'spree.register.calculators' do |_app|
