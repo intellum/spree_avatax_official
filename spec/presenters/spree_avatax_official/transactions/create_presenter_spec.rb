@@ -12,7 +12,7 @@ describe SpreeAvataxOfficial::Transactions::CreatePresenter do
     let(:result) do
       {
         type:            transaction_type,
-        companyCode:     SpreeAvataxOfficial::Configuration.new.company_code,
+        companyCode:     SpreeAvataxOfficial::Config.company_code,
         code:            order.number,
         referenceCode:   order.number,
         date:            order.updated_at.strftime('%Y-%m-%d'),

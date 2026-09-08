@@ -13,7 +13,7 @@ describe SpreeAvataxOfficial::Transactions::PartialRefundPresenter do
   let(:result) do
     {
       type:            'ReturnInvoice',
-      companyCode:     SpreeAvataxOfficial::Configuration.new.company_code,
+      companyCode:     SpreeAvataxOfficial::Config.company_code,
       referenceCode:   order.number,
       code:            "#{order.number}-1",
       date:            order.updated_at.strftime('%Y-%m-%d'),
