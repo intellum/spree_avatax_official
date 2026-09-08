@@ -14,9 +14,13 @@ module SpreeAvataxOfficial
         SpreeAvataxOfficial::Config.license_key                = params[:license_key] if params.key?(:license_key)
         SpreeAvataxOfficial::Config.company_code               = params[:company_code] if params.key?(:company_code)
         SpreeAvataxOfficial::Config.endpoint                   = params[:endpoint] if params.key?(:endpoint)
-        SpreeAvataxOfficial::Config.address_validation_enabled = params[:address_validation_enabled] if params.key?(:address_validation_enabled)
-        SpreeAvataxOfficial::Config.commit_transaction_enabled = params[:commit_transaction_enabled] if params.key?(:commit_transaction_enabled)
-        SpreeAvataxOfficial::Config.enabled                    = params[:enabled] if params.key?(:enabled)
+        # Boolean settings arrive as strings from forms; cast so the boolean
+        # preferences store real booleans (Spree's boolean preference doesn't
+        # coerce string input on assignment).
+        boolean = ActiveModel::Type::Boolean.new
+        SpreeAvataxOfficial::Config.address_validation_enabled = boolean.cast(params[:address_validation_enabled]) if params.key?(:address_validation_enabled)
+        SpreeAvataxOfficial::Config.commit_transaction_enabled = boolean.cast(params[:commit_transaction_enabled]) if params.key?(:commit_transaction_enabled)
+        SpreeAvataxOfficial::Config.enabled                    = boolean.cast(params[:enabled]) if params.key?(:enabled)
       end
 
       def update_address_settings(ship_from_params)

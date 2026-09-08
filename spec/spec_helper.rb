@@ -53,8 +53,12 @@ RSpec.configure do |config|
 
   # == Devise helpers
   #
-  # Helpers using in user authorization
-  config.include Devise::Test::ControllerHelpers, type: :controller
+  # Helpers used in user authorization. Only wired when an auth gem is present —
+  # the Spree-5 gem dropped spree_auth_devise (auth lives in the host app), and
+  # the admin controller specs that needed these moved out with it.
+  if defined?(Devise::Test::ControllerHelpers)
+    config.include Devise::Test::ControllerHelpers, type: :controller
+  end
 
   # == Mock Framework
   #
@@ -69,8 +73,13 @@ RSpec.configure do |config|
     mocks.verify_partial_doubles            = true
   end
 
-  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures.
+  # rspec-rails renamed fixture_path= to fixture_paths= (plural, array).
+  if config.respond_to?(:fixture_paths=)
+    config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
+  else
+    config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  end
 
   # Capybara javascript drivers require transactional fixtures set to false, and we use DatabaseCleaner
   # to cleanup after each test instead.  Without transactional fixtures set to false the records created

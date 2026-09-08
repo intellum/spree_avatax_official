@@ -2,7 +2,9 @@ module Avatax
   module RequestDecorator
     include ::SpreeAvataxOfficial::HttpHelper
 
-    def request(method, path, model, options = {}, apiversion = "")
+    # Signature must match AvaTax::API#request, which gained a `headers` arg in
+    # the current SDK (avatax >= 26) — the SDK calls request/6 internally.
+    def request(method, path, model, options = {}, apiversion = "", _headers = {})
       max_retries ||= ::SpreeAvataxOfficial::Config.max_retries
       uri_encoded_path = URI.parse(path).to_s
 

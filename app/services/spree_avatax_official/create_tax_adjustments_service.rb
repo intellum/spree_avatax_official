@@ -121,7 +121,10 @@ module SpreeAvataxOfficial
     def build_error_message_from_response(avatax_response)
       return ::Spree.t('spree_avatax_official.create_tax_adjustments.tax_calculation_failed') unless error_present?(avatax_response)
 
-      avatax_response['error']['details'].map do |error_detail_entry|
+      details = avatax_response['error']['details']
+      return ::Spree.t('spree_avatax_official.create_tax_adjustments.tax_calculation_failed') if details.blank?
+
+      details.map do |error_detail_entry|
         "#{error_detail_entry['number']} - #{error_detail_entry['message']} - #{error_detail_entry['description']}."
       end.join(' ')
     end

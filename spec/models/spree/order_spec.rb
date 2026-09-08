@@ -24,7 +24,8 @@ describe Spree::Order do
         order.update(state: :complete, completed_at: Time.current)
       end
 
-      allow(Spree::OrderMailer).to receive_message_chain(:cancel_email, :deliver_later)
+      # Spree 5 removed Spree::OrderMailer; guard so the stub is a no-op there.
+      allow(Spree::OrderMailer).to receive_message_chain(:cancel_email, :deliver_later) if defined?(Spree::OrderMailer)
     end
 
     it 'calls void service' do
@@ -60,7 +61,8 @@ describe Spree::Order do
     end
 
     before do
-      allow(Spree::OrderMailer).to receive_message_chain(:confirm_email, :deliver_later)
+      # Spree 5 removed Spree::OrderMailer; guard so the stub is a no-op there.
+      allow(Spree::OrderMailer).to receive_message_chain(:confirm_email, :deliver_later) if defined?(Spree::OrderMailer)
     end
 
     context 'commit transaction enabled' do
